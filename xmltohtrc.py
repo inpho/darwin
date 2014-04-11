@@ -3,6 +3,9 @@ from time import sleep
 from urllib2 import urlopen
 from urllib import quote_plus
 
+import xml.etree.ElementTree as ET
+
+
 def search(title, sleep_time=1):
     """ Queries the HTRC Solr index with a title and returns the resulting metadata.
 Documentation: http://www.hathitrust.org/htrc/solr-api
@@ -20,5 +23,12 @@ Documentation: http://www.hathitrust.org/htrc/solr-api
 
 if __name__ == '__main__':
     title = "An account of the Arctic regions"
-    print search(title)
-
+    xml_map = search(title)
+    tree = ET.parse('bhl_darwin_collection.xml')
+    root = tree.getroot()
+ #   print root.find("TitleID")
+    print root.tag
+ 
+    print (root.find('.//Result/Title/FullTitle')).text
+   #     print e.attrib
+ #   root.xpath = [@TitleID]
