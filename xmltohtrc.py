@@ -8,14 +8,11 @@ import xml.etree.ElementTree as ET
 
 def search(title, sleep_time=1):
     """ Queries the HTRC Solr index with a title and returns the resulting metadata.
-Documentation: http://www.hathitrust.org/htrc/solr-api
-"""
+    Documentation: http://www.hathitrust.org/htrc/solr-api
+    """
     # TODO: Parameterize hostname	
-    #print title
-    #print title.encode('utf-8')
     solr ="http://chinkapin.pti.indiana.edu:9994/solr/meta/select/?q=title:%s" % quote_plus(title)
     solr += "&wt=json" ## retrieve JSON results
-    #print solr
     # TODO: exception handling
     try:
         data = json.load(urlopen(solr))
@@ -27,13 +24,14 @@ Documentation: http://www.hathitrust.org/htrc/solr-api
     return data['response']['docs'][0]
 
 def gather_titles():
-
+    """Takes all the titles from the Darwin Library XML document and write them into a file
+    entitled 'titles.txt'
+    """
     tree = ET.parse('bhl_darwin_collection.xml')
     root = tree.getroot()
-    #print root.tag
-    #print myDict   
 
-    #finds all the 'Title' tags and print the 'FullTitle' child for each of them
+    #finds all the 'Title' tags and writes the 'FullTitle' child for each of
+    #them on their own line into a file
     filename = 'titles.txt'
     target = open(filename,'wb')  
 
@@ -43,27 +41,22 @@ def gather_titles():
         target.write("\n")
     target.close()
 
-    # find the first 'FullTitle' tag and prints it 
-    
-    #u =  root.find('.//Result/Title/FullTitle')
-    #return u.encode('utf-8')
-    #return unicode(root.find('.//Result/Title/FullTitle'))
-
 def get_htrcid():
+    """Opens the 'titles.txt' file and find the HTRC id for each of the titles"""
     exportfile = 'htrc_ids.txt'
     importfile = 'titles.txt' 
     
     export = open(exportfile, 'wb')
 
     for line in open(importfile):
-        #print line
+        #removes all of the extraneous characters in the title
         line = line.rstrip('\n')
         line = line.replace("/", "")
         line = line.replace(":", "")
+        line = line.replace("[", "")
+        line = line.replace("]", "")
         myDict = search(line)
 
-        #print myDict.get('id')
-        #target.write(str(myDict))
         if myDict:
             export.write(myDict.get('id'))
             export.write('\n')
