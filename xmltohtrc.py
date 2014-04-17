@@ -50,20 +50,24 @@ def gather_titles():
     #return unicode(root.find('.//Result/Title/FullTitle'))
 
 def get_htrcid():
-    title = "The anatomy and philosophy of expression"
-    myDict = search(title)
-    #filename = 'htrc_ids.txt'
+    exportfile = 'htrc_ids.txt'
     importfile = 'titles.txt' 
+    
+    export = open(exportfile, 'wb')
+
     for line in open(importfile):
         #print line
         line = line.rstrip('\n')
+        line = line.replace("/", "")
+        line = line.replace(":", "")
         myDict = search(line)
 
         #print myDict.get('id')
         #target.write(str(myDict))
         if myDict:
-            print myDict.get('id')
-    
+            export.write(myDict.get('id'))
+            export.write('\n')
+    export.close()
 
 
 if __name__ == '__main__':
