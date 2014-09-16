@@ -1,3 +1,5 @@
+'''Choose from darwinonline.txt, cambridge.txt, and beagle.txt'''
+
 import rython
 
 from codecs import open
@@ -10,14 +12,15 @@ parser = ctx("Anystyle.parser")
 
 unable_to_parse = 0
 
-readfile = open("darwinonline.txt", "r", errors="ignore")
-for line in readfile:
-    try:
-        print parser.parse(line)
-    except:
-        print "UNABLE TO PARSE"
-        unable_to_parse += 1
-        pass
-
-print unable_to_parse
+with open('beagle.txt', 'r') as readfile,open('beagle_anystyle','w') as writefile: 
+    for line in readfile:
+        try:
+            writefile.write(str(parser.parse(line)))
+        except:
+            writefile.write("UNABLE TO PARSE")
+            print "unable to parse"
+            unable_to_parse += 1
+            pass
+        writefile.write("\n")    
+    writefile.write(str(unable_to_parse))
 
