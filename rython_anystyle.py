@@ -1,4 +1,5 @@
-'''Choose from darwinonline.txt, cambridge.txt, and beagle.txt'''
+'''Takes a .txt file and passes it through AnySyle to create a new .txt file with the results.
+Choose from darwinonline.txt, cambridge.txt, and beagle.txt'''
 
 import rython
 
@@ -12,10 +13,12 @@ parser = ctx("Anystyle.parser")
 
 unable_to_parse = 0
 
-with open('beagle.txt', 'r') as readfile,open('beagle_anystyle','w') as writefile: 
+with open('beagle.txt', 'r') as readfile,open('beagle_titles','w') as writefile: 
     for line in readfile:
         try:
-            writefile.write(str(parser.parse(line)))
+            dictionaryset = parser.parse(line)
+            for dictionary in dictionaryset:
+                writefile.write(dictionary['title'])
         except:
             writefile.write("UNABLE TO PARSE")
             print "unable to parse"
