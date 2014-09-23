@@ -1,5 +1,5 @@
 '''Takes a .txt file and passes it through AnySyle to create a new .txt file with the results.
-Choose from darwinonline.txt, cambridge.txt, and beagle.txt'''
+Choose from cambridge.txt, cambridge.txt, and beagle.txt'''
 
 import json
 from time import sleep
@@ -21,7 +21,7 @@ parser = ctx("Anystyle.parser")
 def gather_titles():
     unable_to_parse = 0
 
-    with open('darwinonline.txt', 'r') as readfile,open('darwinonline_titles.txt','w') as writefile: 
+    with open('cambridge.txt', 'r') as readfile,open('cambridge_titles.txt','w') as writefile: 
         for line in readfile:
             try:
                 dictionaryset = parser.parse(line)
@@ -51,12 +51,15 @@ def search(title, sleep_time=1):
         return
     if sleep:
         sleep(sleep_time) ## JUST TO MAKE SURE WE ARE THROTTLED
-    return data['response']['docs'][0]
+    try:
+        return data['response']['docs'][0]
+    except IndexError:
+        return None
 
 def get_htrcid():
     """Opens the 'titles.txt' file and find the HTRC id for each of the titles"""
-    exportfile = 'darwinonline_ids.txt'
-    importfile = 'darwinonline_titles.txt' 
+    exportfile = 'cambridge_ids.txt'
+    importfile = 'cambridge_titles.txt' 
     
     export = open(exportfile, 'wb')
 
