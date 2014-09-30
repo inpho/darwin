@@ -1,6 +1,26 @@
 '''Takes a .txt file and passes it through AnySyle to create a new .txt file with the results.
 Choose from cambridge.txt, cambridge.txt, and beagle.txt'''
 
+'''
+Naming conventions: 
+
+For example, if the volume title was 'cambridge'.
+
+INPUT:
+cambridge.txt - text file with a listing of citations. This file must be created
+    before you run the program and it's name must set as the volume_tile for the
+    program to run
+
+OUTPUT:
+cambridge_titles.txt - text file with a listing of the titles that were extracted 
+    from the citations with one title per line
+cambridge_ids.txt - text file with a listing of all the found HTRC ids with an 
+    id per line
+
+'''
+
+
+
 import json
 from time import sleep
 from urllib2 import urlopen
@@ -17,11 +37,14 @@ ctx("Encoding.default_external = 'UTF-8'")
 
 parser = ctx("Anystyle.parser")
 
+'set the title of the input volume you are working on'
+volume_title = 'cambridge'
+
 
 def gather_titles():
     unable_to_parse = 0
 
-    with open('cambridge.txt', 'r') as readfile,open('cambridge_titles.txt','w') as writefile: 
+    with open(volume_title + '.txt', 'r') as readfile,open(volume_title + '_titles.txt','w') as writefile: 
         for line in readfile:
             try:
                 dictionaryset = parser.parse(line)
@@ -29,13 +52,10 @@ def gather_titles():
                     writefile.write(dictionary['title'])
                     writefile.write("\n")
             except:
-                #writefile.write("UNABLE TO PARSE")
                 print "unable to parse"
                 unable_to_parse += 1
                 pass
-            #writefile.write("\n")    
-        #writefile.write(str(unable_to_parse))
-
+         
 def search(title, sleep_time=1):
     """ Queries the HTRC Solr index with a title and returns the resulting metadata.
     Documentation: http://www.hathitrust.org/htrc/solr-api
@@ -58,8 +78,8 @@ def search(title, sleep_time=1):
 
 def get_htrcid():
     """Opens the 'titles.txt' file and find the HTRC id for each of the titles"""
-    exportfile = 'cambridge_ids.txt'
-    importfile = 'cambridge_titles.txt' 
+    exportfile = volume_title + '_ids.txt'
+    importfile = volume_title + '_titles.txt' 
     
     export = open(exportfile, 'wb')
 
