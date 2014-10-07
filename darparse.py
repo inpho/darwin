@@ -1,22 +1,11 @@
-'''Takes a .txt file and passes it through AnySyle to create a new .txt file with the results.
-Choose from cambridge.txt, cambridge.txt, and beagle.txt'''
-
 '''
-Naming conventions: 
+Takes a plaintext file of unparsed bibliography entries and parses them using
+AnyStyle.io. Then performs a search for the title on the HathiTrust and returns
+matching IDs. The final data is output as a JSON struct for use on the web,
+particularly with the corpus builder tool at
+http://github.com/inpho/corpus-builder
 
-For example, if the volume title was 'cambridge'.
-
-INPUT:
-cambridge.txt - text file with a listing of citations. This file must be created
-    before you run the program and it's name must set as the volume_tile for the
-    program to run
-
-OUTPUT:
-cambridge_titles.txt - text file with a listing of the titles that were extracted 
-    from the citations with one title per line
-cambridge_ids.txt - text file with a listing of all the found HTRC ids with an 
-    id per line
-
+Run with 'python darparse.py -h' to see a list of command arguments.
 '''
 import json
 from time import sleep
